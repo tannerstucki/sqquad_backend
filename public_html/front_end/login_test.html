@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Login</h2>
+
+<p>Email:</p>
+
+<input id="email">
+
+<p>Password:</p>
+
+<input id="password">
+
+<br></br>
+
+<button type="button" onclick="myFunction()">Submit</button>
+
+<p id="demo"></p>
+
+<script>
+function myFunction() {
+  var email, password;
+  email = document.getElementById("email").value;
+  password = document.getElementById("password").value;
+  const headers = new Headers();
+  headers.append('email', email);
+  headers.append('password', password);
+
+  const init = {
+	method: 'GET',
+	headers
+  }
+
+  fetch('http://sqquad.x10host.com/api/users/validate', init)
+  .then((response) => {
+	return response.text(); // or .json() or .blob() ...
+  })
+  .then((text) => {
+	// text is the response body
+        document.write(text);
+  })
+  .catch((e) => {
+	// error in e.message
+  });
+}
+</script>
+</body>
+</html> 
