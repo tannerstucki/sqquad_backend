@@ -1,6 +1,8 @@
 <?php
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
 
 // Get All Users
 $app->get('/api/users', function(Request $request, Response $response){
@@ -41,7 +43,7 @@ $app->get('/api/users/validate', function(Request $request, Response $response){
             if ($user != null)
                echo json_encode($user);
             else
-               echo '{"error": {"text": "Sorry, either your username or password is incorrect."}';
+               echo '[{"message" : "Sorry, this email and password do not match."}]';
         }catch(PDOException $e){
             echo '{"error": {"text": '.$e->getMessage().'}';
         }

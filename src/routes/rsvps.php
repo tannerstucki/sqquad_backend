@@ -1,6 +1,8 @@
 <?php
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
 
 // Get All Rsvps
 $app->get('/api/rsvps', function(Request $request, Response $response){

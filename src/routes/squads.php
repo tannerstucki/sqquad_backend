@@ -1,6 +1,8 @@
 <?php
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
 
 $app = new \Slim\App;
 
@@ -24,9 +26,8 @@ $app->get('/api/squads', function(Request $request, Response $response){
 });
 
 // Get All Squads for a User
-$app->get('/api/squads/user', function(Request $request, Response $response){
-        $headers = apache_request_headers();
-        $user_id = $headers['user_id'];
+$app->get('/api/squads/user/{user_id}', function(Request $request, Response $response){
+        $user_id = $request->getAttribute('user_id');
 
         $sql = "SELECT * FROM Squad WHERE id IN (SELECT squad_id FROM UserSquad WHERE user_id = '$user_id')";
 
@@ -49,9 +50,10 @@ $app->get('/api/squads/user', function(Request $request, Response $response){
 });
 
 // Get All Members of a Squad
-$app->get('/api/squads/members', function(Request $request, Response $response){
-        $headers = apache_request_headers();
-        $squad_id = $headers['squad_id'];
+$app->get('/api/squads/members/{squad_id}', function(Request $request, Response $response){
+        //$headers = apache_request_headers();
+        //$squad_id = $headers['squad_id'];
+        $squad_id = $request->getAttribute('squad_id');
 
         $sql = "SELECT * FROM User WHERE id IN (SELECT user_id FROM UserSquad WHERE squad_id = '$squad_id')";
 
