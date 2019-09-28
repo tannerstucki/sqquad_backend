@@ -23,6 +23,33 @@ $app->get('/api/invites', function(Request $request, Response $response){
         }
 });
 
+// Get All Invites for a User
+$app->get('/api/invites/user/{user_id}', function(Request $request, Response $response){
+        $user_id = $request->getAttribute('user_id');
+
+        $sql = "SELECT Invite.id, Invite.sender_id, Invite.acceptor_id, Invite.squad_id, Squad.name AS 'squad_name', Invite.invite_type, Invite.acceptor_email, Invite.status FROM Invite
+INNER JOIN Squad
+ON Invite.squad_id = Squad.id
+WHERE acceptor_id = '$user_id'";
+
+        try{
+            //Get DB Object
+            $db = new db();
+            // Connect
+            $db = $db->connect();
+
+            $stmt = $db->query($sql);
+            $squads = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $db = null;
+            if ($squads != null)
+               echo json_encode($squads);
+            else
+               echo '{"error": {"text": "Sorry, you currently have no squads. Create or join one to collab!"}';
+        }catch(PDOException $e){
+            echo '{"error": {"technical": '.$e->getMessage().', "text": "Sorry, you currently have no squads. Create or join one to collab!"}';
+        }
+});
+
 // Get Single Invite
 $app->get('/api/invites/{id}', function(Request $request, Response $response){
         $id = $request->getAttribute('id');
