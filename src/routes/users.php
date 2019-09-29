@@ -126,7 +126,7 @@ $app->post('/api/users', function(Request $request, Response $response){
             $stmt->bindParam(':country',$country);
 
             $stmt->execute();
-            echo '{"notice":{"text": "User Added"}';
+            echo '[{"confirmation" : "User Added", "id" : "'.$id.'"}]';
         }catch(PDOException $e){
             echo '{"error": {"text": '.$e->getMessage().'}';
         }
