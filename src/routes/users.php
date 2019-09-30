@@ -70,6 +70,30 @@ $app->get('/api/users/{id}', function(Request $request, Response $response){
         }
 });
 
+// Get Single User by Name
+$app->get('/api/users/name/{first_name}&{last_name}', function(Request $request, Response $response){
+        $first_name = $request->getAttribute('first_name');
+        $last_name = $request->getAttribute('last_name');
+        
+        $sql = "SELECT * FROM User 
+WHERE first_name = '$first_name'
+AND last_name = '$last_name'";
+
+        try{
+            //Get DB Object
+            $db = new db();
+            // Connect
+            $db = $db->connect();
+
+            $stmt = $db->query($sql);
+            $user = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $db = null;
+            echo json_encode($user);
+        }catch(PDOException $e){
+            echo '{"error": {"text": '.$e->getMessage().'}';
+        }
+});
+
 // Delete User
 $app->delete('/api/users/{id}', function(Request $request, Response $response){
     $id = $request->getAttribute('id');

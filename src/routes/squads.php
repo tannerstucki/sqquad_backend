@@ -147,7 +147,7 @@ $app->post('/api/squads', function(Request $request, Response $response){
             $stmt->bindParam(':organizer_id',$organizer_id);
 
             $stmt->execute();
-            echo '{"notice":{"text": "Squad successfully created."}';
+            //echo '{"notice":{"text": "Squad successfully created."}';
         }catch(PDOException $e){
             echo '{"error": {"text": '.$e->getMessage().'}';
         }
@@ -165,7 +165,7 @@ $app->post('/api/squads', function(Request $request, Response $response){
             $stmt->bindParam(':squad_id',$squad_id);
 
             $stmt->execute();
-            echo '{"notice":{"text": "The organizer has been added to the squad."}';
+            echo '[{"confirmation" : "Squad Created", "id" : "'.$squad_id.'"}]';
         }catch(PDOException $e){
             echo '{"error": {"text": '.$e->getMessage().'}';
         }
