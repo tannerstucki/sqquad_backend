@@ -135,13 +135,14 @@ WHERE User.id = '$acceptor_id'";
             $stmt->bindParam(':new',$new);
 
             $stmt->execute();
-            echo '{"notice":{"text": "Invite Added"}';
+            echo '[{"confirmation" : "Invite Sent", "id" : "'.$id.'"}]';
+            //echo '{"notice":{"text": "Invite Added"}';
 
             $stmt_gather = $db->query($sql_gather_info);
             $gather = $stmt_gather->fetchAll(PDO::FETCH_OBJ);
             $gather_json = json_encode($gather);
             $db = null;
-            echo '{"notice":{"text": "Sender data gathered"}';
+            //echo '{"notice":{"text": "Sender data gathered"}';
         }catch(PDOException $e){
             echo '{"error": {"text": '.$e->getMessage().'}';
         }
@@ -161,10 +162,10 @@ WHERE User.id = '$acceptor_id'";
            $email_text = "Hi there! You have received an invite from $sender_first $sender_last to join the team $squad_name on Squad. We noticed that you don't have a Squad account yet though. Click on this link to create your free account and join your squad!";
         }
         $subject = "$sender_first sent you an invite!";
-        $headers = "From: tanner.stucki@pwc.com"; //change this to squad's email address
+        $headers = "From: virtualmanager@squad.com"; //change this to squad's email address
 
         mail($destination_email,$subject,$email_text,$headers);
-        echo '{"notice":{"text": "Email has been sent"}';    
+        //echo '{"notice":{"text": "Email has been sent"}';    
 });
 
 //Update Invite

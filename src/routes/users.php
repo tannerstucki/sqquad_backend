@@ -88,7 +88,10 @@ AND last_name = '$last_name'";
             $stmt = $db->query($sql);
             $user = $stmt->fetchAll(PDO::FETCH_OBJ);
             $db = null;
-            echo json_encode($user);
+            if ($user != null)
+               echo json_encode($user);
+            else
+               echo '[{"message" : "Sorry, we did not find any users with that name."}]';
         }catch(PDOException $e){
             echo '{"error": {"text": '.$e->getMessage().'}';
         }
@@ -150,7 +153,7 @@ $app->post('/api/users', function(Request $request, Response $response){
             $stmt->bindParam(':country',$country);
 
             $stmt->execute();
-            echo '[{"confirmation" : "User Added", "id" : "'.$id.'"}]';
+            echo '[{"confirmation" : "Welcome! Click the menu button to create a squad or check out your invites!", "id" : "'.$id.'"}]';
         }catch(PDOException $e){
             echo '{"error": {"text": '.$e->getMessage().'}';
         }
