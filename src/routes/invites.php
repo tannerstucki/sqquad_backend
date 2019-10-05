@@ -203,7 +203,15 @@ $app->put('/api/invites/{id}', function(Request $request, Response $response){
             $stmt->bindParam(':status',$status);
 
             $stmt->execute();
-            echo '{"notice":{"text": "Invite Updated"}';
+            if ($status == 'accepted'){
+               echo '[{"confirmation" : "Invite accepted", "id" : "'.$id.'"}]';
+            }
+            else if ($status == 'declined'){
+               echo '[{"confirmation" : "Invite declined", "id" : "'.$id.'"}]';
+            }
+            else {
+               echo '[{"confirmation" : "Invite updated", "id" : "'.$id.'"}]';
+            }
         }catch(PDOException $e){
             echo '{"error": {"text": '.$e->getMessage().'}';
         }

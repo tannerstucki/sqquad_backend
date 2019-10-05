@@ -192,7 +192,7 @@ $app->post('/api/squads/join', function(Request $request, Response $response){
             $stmt->bindParam(':squad_id',$squad_id);
 
             $stmt->execute();
-            echo '{"notice":{"text": "Successfully joined squad."}';
+               echo '[{"confirmation" : "You joined a new squad", "id" : "'.$id.'"}]';
         }catch(PDOException $e){
             echo '{"error": {"text": '.$e->getMessage().'}';
         }
