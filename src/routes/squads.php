@@ -43,7 +43,7 @@ $app->get('/api/squads/user/{user_id}', function(Request $request, Response $res
             if ($squads != null)
                echo json_encode($squads);
             else
-               echo '{"error": {"text": "Sorry, you currently have no squads. Create or join one to collab!"}';
+               echo '[{"message" : "Sorry, you have no squads. Create or join one to get started!"}]';
         }catch(PDOException $e){
             echo '{"error": {"technical": '.$e->getMessage().', "text": "Sorry, you currently have no squads. Create or join one to collab!"}';
         }

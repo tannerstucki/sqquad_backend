@@ -128,34 +128,61 @@ $app->post('/api/users', function(Request $request, Response $response){
         $city = $request->getParam('city');
         $state = $request->getParam('state');
         $country = $request->getParam('country');
+        $already_taken = 'false';
+
+        $alreadyExistsSql = "SELECT * FROM User WHERE email = '$email'";
         
         $sql = "INSERT INTO User (id,password,first_name,last_name,email,phone_number,age,user_type,city,state,country) VALUES
         (:id,:password,:first_name,:last_name,:email,:phone_number,:age,:user_type,:city,:state,:country)";
 
+//Check that the email isn't already taken
         try{
             //Get DB Object
             $db = new db();
             // Connect
             $db = $db->connect();
 
-            $stmt = $db->prepare($sql);
+            $stmt = $db->prepare($alreadyExistsSql);
 
-            $stmt->bindParam(':id',$id);
-            $stmt->bindParam(':password',$password);
-            $stmt->bindParam(':first_name',$first_name);
-            $stmt->bindParam(':last_name',$last_name);
             $stmt->bindParam(':email',$email);
-            $stmt->bindParam(':phone_number',$phone_number);
-            $stmt->bindParam(':age',$age);
-            $stmt->bindParam(':user_type',$user_type);
-            $stmt->bindParam(':city',$city);
-            $stmt->bindParam(':state',$state);
-            $stmt->bindParam(':country',$country);
 
-            $stmt->execute();
-            echo '[{"confirmation" : "Welcome! Click the menu button to create a squad or check out your invites!", "id" : "'.$id.'"}]';
+            $stmt = $db->query($alreadyExistsSql);
+            $user = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $db = null;
+            if ($user != null) {
+               $already_taken = 'true';
+               echo '[{"message" : "Sorry, that email is already taken."}]';
+            }
         }catch(PDOException $e){
             echo '{"error": {"text": '.$e->getMessage().'}';
+        }
+
+        if ($already_taken == 'false') {
+           try{
+               //Get DB Object
+               $db = new db();
+               // Connect
+               $db = $db->connect();
+
+               $stmt = $db->prepare($sql);
+
+               $stmt->bindParam(':id',$id);
+               $stmt->bindParam(':password',$password);
+               $stmt->bindParam(':first_name',$first_name);
+               $stmt->bindParam(':last_name',$last_name);
+               $stmt->bindParam(':email',$email);
+               $stmt->bindParam(':phone_number',$phone_number);
+               $stmt->bindParam(':age',$age);
+               $stmt->bindParam(':user_type',$user_type);
+               $stmt->bindParam(':city',$city);
+               $stmt->bindParam(':state',$state);
+               $stmt->bindParam(':country',$country);
+
+               $stmt->execute();
+               echo '[{"confirmation" : "Welcome! Click the menu button to create a squad or check out your invites!", "id" : "'.$id.'"}]';
+           }catch(PDOException $e){
+               echo '{"error": {"text": '.$e->getMessage().'}';
+           }
         }
 });
 
