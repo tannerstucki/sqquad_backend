@@ -24,9 +24,10 @@ $app->get('/api/messages', function(Request $request, Response $response){
 });
 
 // All Messages Page (organized according to sender and date)
-$app->get('/api/messages/page', function(Request $request, Response $response){
-        $headers = apache_request_headers();
-        $user_id = $headers['user_id'];
+$app->get('/api/messages/page/{user_id}', function(Request $request, Response $response){
+        //$headers = apache_request_headers();
+        //$user_id = $headers['user_id'];
+        $user_id = $request->getAttribute('user_id');
 
         $sql = "(SELECT Message.*, CONCAT(User.first_name, ' ', User.last_name) AS name, Squad.name as squad_name
 FROM Message
