@@ -96,7 +96,7 @@ INNER JOIN User ON User.id = Message.sender_id
 WHERE Message.id IN (SELECT message_id FROM UserMessage WHERE user_id = '$sender_id') 
 AND sender_id = '$user_id'
 AND message_type = 'user')
-ORDER BY date_time DESC";
+ORDER BY date_time ASC";
         else
            $sql = "SELECT Message.*, CONCAT(User.first_name, ' ', User.last_name) AS name, Squad.name AS squad_name
 FROM Message 
@@ -105,7 +105,7 @@ INNER JOIN User ON User.id = Message.sender_id
 WHERE Message.id IN (SELECT message_id FROM UserMessage WHERE user_id = '$user_id') 
 AND squad_id = '$squad_id'
 AND message_type = 'squad'
-ORDER BY date_time DESC";
+ORDER BY date_time ASC";
 
         try{
             //Get DB Object
